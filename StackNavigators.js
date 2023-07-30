@@ -29,6 +29,9 @@ const StackNavigators = () => {
         return <tab.Navigator screenOptions={screenOptions}>
             <tab.Screen name='Home' component={HomeScreen} options={{
                 tabBarLabel: 'Tìm kiếm',
+                tabBarLabelStyle: {
+                    fontWeight: 500
+                },
                 tabBarIcon: ({ focused }) =>
                     focused ? <Ionicons name="md-search-circle-sharp" size={33} color={colors.primary} />
                         : <Ionicons name="md-search-circle-outline" size={33} color="black" />
@@ -36,18 +39,27 @@ const StackNavigators = () => {
             />
             <tab.Screen name='Saved' component={SavedScreen} options={{
                 tabBarLabel: 'Đã lưu',
+                tabBarLabelStyle: {
+                    fontWeight: 500
+                },
                 tabBarIcon: ({ focused }) =>
                     focused ? <AntDesign name="heart" size={24} color={colors.primary} />
                         : <AntDesign name="hearto" size={24} color="black" />
             }} />
             <tab.Screen name='Bookings' component={BookingScreen} options={{
                 tabBarLabel: 'Đặt chỗ',
+                tabBarLabelStyle: {
+                    fontWeight: 500
+                },
                 tabBarIcon: ({ focused }) =>
                     focused ? <Ionicons name="notifications" size={24} color={colors.primary} />
                         : <Ionicons name="notifications-outline" size={24} color="black" />
             }} />
             <tab.Screen name='Profile' component={ProfileScreen} options={{
                 tabBarLabel: 'Cá nhân',
+                tabBarLabelStyle: {
+                    fontWeight: 500
+                },
                 tabBarIcon: ({ focused }) =>
                     focused ? <Ionicons name="person" size={24} color={colors.primary} />
                         : <Ionicons name="person-outline" size={24} color="black" />
