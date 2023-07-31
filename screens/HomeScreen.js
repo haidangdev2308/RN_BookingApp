@@ -5,11 +5,12 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
-  ScrollView
-
+  ScrollView,
+  Image,
+  Alert
 } from 'react-native'
 import React, { useLayoutEffect, useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import DatePicker from 'react-native-date-ranges';
 import { colors } from '../constants'
 import { Header } from '../components';
@@ -23,6 +24,8 @@ import Modal from 'react-native-modal';
 
 const HomeScreen = () => {
   const nav = useNavigation()
+  const route = useRoute() // truy cập đến thông tin của màn hình trong navigation
+
   const [selectedDate, setSelectedDate] = useState()
   const [room, setRoom] = useState(1)
   const [adult, setAdult] = useState(2)
@@ -62,15 +65,51 @@ const HomeScreen = () => {
     />
   )
 
+  const searchPlace = (place) => {
+    if (!route.params || !selectedDate) { // nếu ko có dữ liệu từ 1 trong 2 cái
+      Alert.alert('', 'Vui lòng nhập đầy đủ thông tin!', [
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ]);
+    }
+    if (route.params && selectedDate) {
+      nav.navigate("PlaceScreen", {
+        place: place,
+        selectedDate: selectedDate,
+        room: room,
+        adult: adult,
+        children: children
+      })
+    }
+  }
+
   return (
-    <>
-      <View>
+    <View className='bg-white flex-1'>
+      <View >
         <Header />
-        <ScrollView>
-          <View className="border-[3px] rounded-md border-[#ffb700] m-4">
-            <Pressable className='border-[2px] border-[#ffb700] flex-row p-3 items-center'>
+        <ScrollView className='bg-white'>
+          <View
+            className="border-[3px] rounded-md border-[#ffb700] m-4 bg-white"
+            style={{
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3,
+              elevation: 5,
+            }}>
+            <Pressable
+              onPress={() => {
+                nav.navigate('SearchScreen')
+              }}
+              className='border-[2px] border-[#ffb700] flex-row p-3 items-center'>
               <AntDesign name="search1" size={24} color="black" />
-              <TextInput style={{ marginStart: 10, width: 320, }} placeholderTextColor='rgba(0,0,0,0.2)' placeholder='Nhập điểm đến của bạn' />
+              {
+                route?.params ?
+                  <Text style={{ marginStart: 10, width: 320, color: 'black' }}>{route.params.input}</Text>
+                  : <Text style={{ marginStart: 10, width: 320, color: 'rgba(0,0,0,0.2)' }}>Nhập điểm đến của bạn</Text>
+              }
             </Pressable>
 
             <Pressable className='border-[2px] border-[#ffb700] flex-row p-3 items-center'>
@@ -115,6 +154,9 @@ const HomeScreen = () => {
 
             <View className='bg-[#ffb700] mb-[-1px]'>
               <Pressable
+                onPress={() => {
+                  searchPlace(route.params?.input)
+                }}
                 style={{ backgroundColor: colors.button }}
                 className='border-[2px] rounded-md border-[#ffb700] flex-row p-3 items-center justify-center'>
                 <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Tìm</Text>
@@ -122,28 +164,28 @@ const HomeScreen = () => {
             </View>
           </View>
 
-          <Text className='mt-12 mx-4 mb-4 font-bold text-[21px]'>Đi nhiều hơn, trả ít hơn</Text>
+          <Text className='mt-10 mx-4 mb-4 font-bold text-[21px]'>Đi nhiều hơn, trả ít hơn</Text>
           <ScrollView
             showsHorizontalScrollIndicator={false}
             horizontal className='ml-4'>
             <Pressable style={{
-              width: 220,
+              width: 240,
               height: 150,
               backgroundColor: colors.primary,
               borderRadius: 10,
               padding: 16,
               marginRight: 14
             }}>
-              <Text className='font-bold text-[16px] mb-1 text-white'>Genius</Text>
+              <Text className='font-bold text-[15px] mb-2 text-white'>Genius</Text>
               <Text className='text-white text-sm'>
-                Bạn đang là
+                Xin chào, bạn đang là
                 <Text className='font-bold'> Genius cấp 1 </Text>
                 trong chương trình khách hàng thân thiết của chúng tôi
               </Text>
             </Pressable>
 
             <Pressable style={{
-              width: 220,
+              width: 240,
               height: 150,
               backgroundColor: 'white',
               borderRadius: 10,
@@ -152,12 +194,44 @@ const HomeScreen = () => {
               padding: 16,
               marginRight: 14
             }}>
-              <Text className='font-bold text-[16px] mb-1 text-black'>Giảm giá 10%</Text>
-              <Text className='text-black text-sm'>
+              <View className='flex-row justify-between items-center'>
+                <Text className='font-bold text-[15px]  text-black'>Giảm giá 10%</Text>
+                <MaterialCommunityIcons name="brightness-percent" size={20} color={colors.button} />
+              </View>
+              <Text className='text-black text-xs mt-2'>
                 Tận hưởng giảm giá tại các chỗ nghỉ tham gia trên toàn cầu
               </Text>
             </Pressable>
+
+            <Pressable style={{
+              width: 240,
+              height: 150,
+              backgroundColor: 'rgba(0,0,0,0.03)',
+              borderRadius: 10,
+              borderColor: colors.inActive,
+              borderWidth: 1,
+              padding: 16,
+              marginRight: 14
+            }}>
+              <View className='flex-row justify-between items-center'>
+                <Text className='font-bold text-[15px] text-black'>Giảm giá 15%</Text>
+                <Ionicons name="lock-closed-outline" size={20} color={colors.inActive} />
+              </View>
+              <Text className='text-black text-xs mt-2'>
+                Hoàn tất 5 kỳ lưu trú để mở khoá Genius Cấp 2
+              </Text>
+            </Pressable>
           </ScrollView>
+
+          <Image
+            source={require('../assets/logo.png')}
+            style={{
+              width: 230,
+              height: 60,
+              marginTop: 30,
+              alignSelf: 'center',
+            }}
+          ></Image>
 
         </ScrollView>
       </View>
@@ -246,12 +320,14 @@ const HomeScreen = () => {
               padding: 10,
               borderRadius: 5,
             }}>
-              <Text className="text-white text-center font-semibold text-[18px]">Áp dụng</Text>
+              <Text
+                className="text-white text-center font-semibold text-[18px]"
+              >Áp dụng</Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
-    </>
+    </View>
   )
 }
 

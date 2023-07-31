@@ -3,7 +3,7 @@ import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { NavigationContainer } from '@react-navigation/native'
-import { BookingScreen, HomeScreen, ProfileScreen, SavedScreen } from './screens'
+import { BookingScreen, HomeScreen, PlaceScreen, ProfileScreen, SavedScreen, SearchScreen } from './screens'
 import { Entypo } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -70,6 +70,8 @@ const StackNavigators = () => {
     return <NavigationContainer>
         <stack.Navigator initialRouteName='Main' screenOptions={{ headerShown: false }}>
             <stack.Screen name={'Main'} component={BottomTab} />
+            <stack.Screen name={'SearchScreen'} component={SearchScreen} />
+            <stack.Screen name={'PlaceScreen'} component={PlaceScreen} />
         </stack.Navigator>
     </NavigationContainer>
 }
