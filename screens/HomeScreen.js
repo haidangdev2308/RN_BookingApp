@@ -252,7 +252,7 @@ const HomeScreen = () => {
           borderTopLeftRadius: 10,
           borderTopRightRadius: 10
         }}>
-          <View className="pt-[30] px-[18px]">
+          <View className="pt-[30px] px-[18px]">
             <Text className="text-[25px] font-bold ">Chọn phòng và khách</Text>
           </View>
           <View className="h-[210px] justify-evenly"

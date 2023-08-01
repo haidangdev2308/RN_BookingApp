@@ -6,7 +6,11 @@ import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { data } from '../data'
 import { PropertyCard } from '../components';
-import React from 'react'
+import React, { useState } from 'react'
+import Modal from 'react-native-modal';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { filters } from '../data'
+
 
 const PlaceScreen = () => {
 
@@ -15,6 +19,39 @@ const PlaceScreen = () => {
     // {"adult": 2, "children": 0, "place": "Hyderabad", "room": 1, "selectedDate": {"endDate": "2023/07/20", "startDate": "2023/07/12"}} 
     const { place, room, children, adult, selectedDate } = route.params
 
+    const [modalVisible, setModalVisible] = useState(false)
+    const showModal = () => setModalVisible(true);
+    const hideModal = () => setModalVisible(false);
+
+    const [selectedFilter, setSelectedFilter] = useState('')
+    const [sortedData, setSortedData] = useState(data)
+
+    const searchPlace = data?.filter((item) => item.place === place) // item khi search
+
+    //thấp den cao
+    const compare = (a, b) => {
+        return a.newPrice - b.newPrice
+    }
+    //cao den thap
+    const comparison = (a, b) => {
+        return b.newPrice - a.newPrice
+    }
+
+    const applyFilter = (filter) => {
+        hideModal()
+        switch (filter) {
+            case "0":
+                searchPlace.map((item) => item.properties.sort(compare))
+                setSortedData(searchPlace)
+                break;
+            case "1":
+                searchPlace.map((item) => item.properties.sort(comparison))
+                setSortedData(searchPlace)
+                break;
+            default:
+                break;
+        }
+    }
 
     return (
         <SafeAreaView className='flex-1 bg-white'>
@@ -53,26 +90,28 @@ const PlaceScreen = () => {
                     height: 80,
                     justifyContent: 'flex-end'
                 }}>
-                    <View className='flex-row justify-around mb-4'>
-                        <Pressable className='flex-row items-baseline gap-1'>
+                    <View className='flex-row justify-around'>
+                        <TouchableOpacity
+                            onPress={() => showModal()}
+                            className='flex-row items-baseline gap-1 p-4'>
                             <FontAwesome name="sort" size={20} color='black' />
                             <Text>Sắp xếp</Text>
-                        </Pressable>
-                        <Pressable className='flex-row items-baseline gap-1'>
+                        </TouchableOpacity>
+                        <TouchableOpacity className='flex-row items-baseline gap-1 p-4'>
                             <FontAwesome name="filter" size={20} color='black' />
                             <Text>Lọc</Text>
-                        </Pressable>
-                        <Pressable className='flex-row items-baseline gap-1'>
+                        </TouchableOpacity>
+                        <TouchableOpacity className='flex-row items-baseline gap-1 p-4'>
                             <FontAwesome5 name="map-marked-alt" size={20} color='black' />
                             <Text>Bản đồ</Text>
-                        </Pressable>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
 
             <ScrollView>
                 {
-                    data.map((x) => {
+                    sortedData.map((x) => {
                         if (x.place.toLowerCase() == place.toLowerCase()) {
                             return (<Text key={x.place} className='text-black mx-5 mt-3 mb-3'>
                                 {x.properties.length} chỗ nghỉ
@@ -82,7 +121,7 @@ const PlaceScreen = () => {
                 }
 
                 {
-                    data?.filter((item) => item.place === place)
+                    sortedData?.filter((item) => item.place === place)
                         .map((item) => item.properties
                             .map((property, index) =>
                                 <PropertyCard
@@ -97,6 +136,59 @@ const PlaceScreen = () => {
                             ))
                 }
             </ScrollView>
+
+            <Modal
+                isVisible={modalVisible}
+                onBackdropPress={() => hideModal()}
+                animationIn="slideInUp" // Hiệu ứng khi modal hiển thị (hiệu ứng từ phía dưới lên)
+                animationOut="slideOutDown" // Hiệu ứng khi modal ẩn đi (hiệu ứng từ phía trên xuống)
+                backdropOpacity={0.5}
+                style={{
+                    justifyContent: 'flex-end',
+                    margin: 0,
+                }}
+            >
+                <View style={{
+                    backgroundColor: 'white',
+                    borderTopLeftRadius: 10,
+                    borderTopRightRadius: 10,
+                    height: 350
+                }}>
+                    <View className="pt-[20px] px-[18px]">
+                        <Text className="text-[22px] font-bold ">Chọn phòng và khách</Text>
+                    </View>
+                    <View className=' my-6 mx-[18px] flex-1 flex-col'>
+                        {
+                            filters.map((filter, index) => (
+                                <TouchableOpacity onPress={() => {
+                                    setSelectedFilter(filter.id)
+                                }} key={index} className='mb-5 flex-row justify-between'>
+                                    <Text className='text-[15px]'>{filter.filter}</Text>
+                                    {
+                                        selectedFilter.includes(filter.id) ?
+                                            <MaterialCommunityIcons name="circle-slice-8" size={22} color={colors.button} />
+                                            : <MaterialCommunityIcons name="circle-outline" size={22} color={colors.inActive} />
+                                    }
+                                </TouchableOpacity>
+                            ))
+                        }
+
+                    </View>
+                    <TouchableOpacity
+                        onPress={() => applyFilter(selectedFilter)}
+                        style={{
+                            backgroundColor: colors.button,
+                            padding: 10,
+                            borderRadius: 5,
+                            marginHorizontal: 50,
+                            marginBottom: 25
+                        }}>
+                        <Text
+                            className="text-white text-center font-semibold text-[18px]"
+                        >Áp dụng</Text>
+                    </TouchableOpacity>
+                </View>
+            </Modal>
         </SafeAreaView>
     )
 }

@@ -16,8 +16,8 @@ export const data = [
         rating: 3.6,
         address:
           "346, Hennur Main Road, Post, Kalyan Nagar, 560043 Bangalore, India ",
-        oldPrice: 4600,
-        newPrice: 3312,
+        oldPrice: 4600000,
+        newPrice: 3312000,
         latitude: "13.0359",
         longitude: "77.6431",
         photos: [
@@ -106,8 +106,8 @@ export const data = [
         rating: 4,
         address:
           " 648/B, Regenta Inn Indiranagar, Binnamangala 1st stage Indiranagar, 560038 Bangalore, India",
-        oldPrice: 4201,
-        newPrice: 3327,
+        oldPrice: 4201000,
+        newPrice: 3327000,
         latitude: "12.9784",
         longitude: "77.6408",
         photos: [
@@ -195,8 +195,8 @@ export const data = [
         rating: 4.2,
         address:
           "Down Town Park, Sadahalli Gate, Kempegowda Int'l Airport Rd, 562157 Bangalore, India",
-        oldPrice: 3800,
-        newPrice: 3078,
+        oldPrice: 3800000,
+        newPrice: 3078000,
         latitude: "13.1989",
         longitude: "77.7068",
         image:
@@ -291,8 +291,8 @@ export const data = [
         rating: 3.5,
         address:
           "CFC-4/C, Road No-2 Hardware Park, Beside TCS, Tukkuguda, 501351 Hyderabad, India",
-        oldPrice: 4332,
-        newPrice: 3200,
+        oldPrice: 4332000,
+        newPrice: 3200000,
         photos: [
           {
             id: "140",
@@ -379,8 +379,8 @@ export const data = [
         rating: 4.5,
         address:
           "Plot 73, Shilpi Valley, Gafoor Nagar, Madhapur, Opp Hitech City Mindspace, Hyderabad",
-        oldPrice: 5200,
-        newPrice: 4100,
+        oldPrice: 5200000,
+        newPrice: 4100000,
         photos: [
           {
             id: "160",
@@ -464,14 +464,14 @@ export const data = [
   },
 ];
 
-const filters = [
+export const filters = [
   {
     id: "0",
-    filter: "cost:Low to High",
+    filter: "Giá (thấp đến cao):",
   },
   {
     id: "1",
-    filter: "cost:High to Low",
+    filter: "Giá (cao đến thấp):",
   },
 ];
 
