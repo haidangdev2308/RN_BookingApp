@@ -101,7 +101,13 @@ const PlaceScreen = () => {
                             <FontAwesome name="filter" size={20} color='black' />
                             <Text>Lọc</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity className='flex-row items-baseline gap-1 p-4'>
+                        <TouchableOpacity onPress={() => {
+                            nav.navigate('MapScreen', {
+                                searchResult: searchPlace,
+                                place: place,
+                                selectedDate: selectedDate,
+                            })
+                        }} className='flex-row items-baseline gap-1 p-4'>
                             <FontAwesome5 name="map-marked-alt" size={20} color='black' />
                             <Text>Bản đồ</Text>
                         </TouchableOpacity>

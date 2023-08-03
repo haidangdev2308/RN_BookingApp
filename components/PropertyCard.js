@@ -4,6 +4,7 @@ import { colors } from '../constants';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import React from 'react'
+import { useNavigation } from '@react-navigation/native';
 
 const PropertyCard = (props) => {
 
@@ -15,14 +16,30 @@ const PropertyCard = (props) => {
         currency: 'VND',
     });
 
+    const nav = useNavigation()
 
     return (
-        <Pressable className='flex-row  p-5 '
+        <Pressable onPress={() => {
+            nav.navigate('PropertyInfoScreen',
+                {
+                    name: property.name,
+                    rating: property.rating,
+                    oldPrice: property.oldPrice,
+                    newPrice: property.newPrice,
+                    photos: property.photos,
+                    room: room,
+                    adult: adult,
+                    children: children,
+                    selectedDate: selectedDate,
+                    availableRoom: availableRoom
+                }
+            )
+        }} className='flex-row  p-5 '
             style={{
                 borderWidth: 0.5,
                 borderColor: 'rgba(0,0,0,0.1)'
             }}>
-            <View >
+            <View>
                 <Image style={{
                     width: width - 280,
                     borderRadius: 8,
