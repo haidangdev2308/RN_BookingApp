@@ -1,4 +1,4 @@
-import { View, Text, Dimensions, Pressable, Image } from 'react-native'
+import { View, Text, Dimensions, Pressable, Image, TouchableOpacity } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 import { colors } from '../constants';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -19,7 +19,7 @@ const PropertyCard = (props) => {
     const nav = useNavigation()
 
     return (
-        <Pressable onPress={() => {
+        <TouchableOpacity onPress={() => {
             nav.navigate('PropertyInfoScreen',
                 {
                     name: property.name,
@@ -88,7 +88,7 @@ const PropertyCard = (props) => {
                     </View>
                 </View>
             </View>
-        </Pressable >
+        </ TouchableOpacity>
     )
 }
 
