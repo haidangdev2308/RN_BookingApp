@@ -155,7 +155,7 @@ const PropertyInfoScreen = () => {
                         fontSize: 15
                     }}>{room} phòng, {adult} người lớn, {children} trẻ em</Text>
                 </View>
-                <View>
+                <View className='mb-5'>
                     <Text className='font-bold text-xl mb-3 '>Những tiện nghi phổ biến nhất</Text>
                     <View className='flex-row flex-wrap '>
                         <View className='flex-row items-center gap-2 mr-3 mb-5'>
@@ -188,9 +188,33 @@ const PropertyInfoScreen = () => {
                         </View>
                     </View>
                 </View>
-                <View className='h-[100px] bg-pink-400'>
-                </View>
+
             </ScrollView>
+            <View style={{ marginVertical: 6 }}>
+                <TouchableOpacity
+                    onPress={() => {
+                        nav.navigate('RoomsScreen', {
+                            rooms: availableRoom,
+                            oldPrice: oldPrice,
+                            newPrice: newPrice,
+                            name: name,
+                            children: children,
+                            adult: adult,
+                            rating: rating,
+                            startDate: selectedDate.startDate,
+                            endDate: selectedDate.endDate
+                        })
+                    }}
+                    style={{
+                        backgroundColor: '#0071C2',
+                        padding: 11,
+                        marginLeft: 6,
+                        marginRight: 6,
+                        alignItems: 'center'
+                    }}>
+                    <Text className='font-semibold text-white text-[16px]'>Xem các lựa chọn</Text>
+                </TouchableOpacity>
+            </View>
         </SafeAreaView>
     )
 }
