@@ -79,7 +79,7 @@ const PropertyInfoScreen = () => {
                         <Text className='text-white'>{rating}</Text>
                     </View>
                 </View>
-                <Pressable className='flex-row flex-wrap items-center'>
+                <Pressable onPress={() => { nav.navigate('PhotoScreen', { photos: photos, name: name }) }} className='flex-row flex-wrap items-center'>
                     {
                         photos.slice(0, 5).map((photo, index) => (
                             <View key={index} className='mr-[6px] mb-[10px]'>

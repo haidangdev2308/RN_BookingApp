@@ -174,15 +174,12 @@ const RoomsScreen = () => {
                                                 flex: 1,
                                                 marginStart: '40%'
                                             }}> ĐÃ CHỌN</Text>
-                                            <AntDesign onPress={() => {
-                                                let newSelected = selected.filter(item => item !== room.id);
-                                                return setSelected(newSelected)
-                                            }}
+                                            <AntDesign onPress={() => setSelected([])}
                                                 style={{ marginRight: 10 }} name="closesquare" size={24} color="#CC0000" />
                                         </Pressable> :
-                                        <Pressable
+                                        <TouchableOpacity
                                             onPress={() => {
-                                                setSelected([...selected, room.id])
+                                                setSelected(room.id)
                                             }}
                                             style={{
                                                 borderColor: colors.primary,
@@ -197,7 +194,7 @@ const RoomsScreen = () => {
                                                 fontWeight: 700,
                                                 fontSize: 16,
                                             }}>CHỌN</Text>
-                                        </Pressable>
+                                        </TouchableOpacity>
                                 }
                             </Pressable>
                         )
@@ -209,14 +206,25 @@ const RoomsScreen = () => {
                     <View style={{ marginVertical: 6 }}>
                         <TouchableOpacity
                             onPress={() => {
-                                nav.navigate('UserScreen')
+                                nav.navigate('UserScreen', {
+                                    oldPrice: oldPrice,
+                                    newPrice: newPrice,
+                                    name: name,
+                                    children: children,
+                                    adult: adult,
+                                    rating: rating,
+                                    startDate: startDate,
+                                    endDate: endDate,
+                                    selectedRoom: selected,
+                                })
                             }}
                             style={{
                                 backgroundColor: '#0071C2',
                                 padding: 11,
                                 marginLeft: 6,
                                 marginRight: 6,
-                                alignItems: 'center'
+                                alignItems: 'center',
+                                borderRadius: 4
                             }}>
                             <Text className='font-semibold text-white text-[16px]'>Đặt ngay</Text>
                         </TouchableOpacity>

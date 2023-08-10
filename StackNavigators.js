@@ -13,7 +13,8 @@ import {
     MapScreen,
     PropertyInfoScreen,
     RoomsScreen,
-    UserScreen
+    UserScreen,
+    PhotoScreen
 
 } from './screens'
 import { Entypo } from '@expo/vector-icons';
@@ -88,6 +89,7 @@ const StackNavigators = () => {
             <stack.Screen name={'PropertyInfoScreen'} component={PropertyInfoScreen} />
             <stack.Screen name={'RoomsScreen'} component={RoomsScreen} />
             <stack.Screen name={'UserScreen'} component={UserScreen} />
+            <stack.Screen name={'PhotoScreen'} component={PhotoScreen} />
         </stack.Navigator>
     </NavigationContainer>
 }

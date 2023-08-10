@@ -4,7 +4,6 @@ import StackNavigators from './StackNavigators';
 
 export default function App() {
 
-  console.log('reload');
   return (
     <>
       <StackNavigators />
