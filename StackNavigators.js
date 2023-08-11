@@ -14,7 +14,10 @@ import {
     PropertyInfoScreen,
     RoomsScreen,
     UserScreen,
-    PhotoScreen
+    PhotoScreen,
+    ConfirmationScreen,
+    LoginScreen,
+    RegisterScreen
 
 } from './screens'
 import { Entypo } from '@expo/vector-icons';
@@ -81,7 +84,9 @@ const StackNavigators = () => {
     }
 
     return <NavigationContainer>
-        <stack.Navigator initialRouteName='Main' screenOptions={{ headerShown: false }}>
+        <stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false }}>
+            <stack.Screen name={'Login'} component={LoginScreen} />
+            <stack.Screen name={'Register'} component={RegisterScreen} />
             <stack.Screen name={'Main'} component={BottomTab} />
             <stack.Screen name={'SearchScreen'} component={SearchScreen} />
             <stack.Screen name={'PlaceScreen'} component={PlaceScreen} />
@@ -90,6 +95,7 @@ const StackNavigators = () => {
             <stack.Screen name={'RoomsScreen'} component={RoomsScreen} />
             <stack.Screen name={'UserScreen'} component={UserScreen} />
             <stack.Screen name={'PhotoScreen'} component={PhotoScreen} />
+            <stack.Screen name={'ConfirmationScreen'} component={ConfirmationScreen} />
         </stack.Navigator>
     </NavigationContainer>
 }

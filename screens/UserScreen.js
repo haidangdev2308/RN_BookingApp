@@ -1,6 +1,6 @@
 import {
     View, Text, SafeAreaView, TouchableOpacity,
-    ScrollView, TextInput, Keyboard, KeyboardAvoidingView, Platform, Pressable
+    ScrollView, TextInput, Platform, Pressable
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { colors } from '../constants';
@@ -40,9 +40,9 @@ const UserScreen = () => {
     });
 
     const isValidationSuccess = () => {
-        return true // cho nhanh
-        // return email.length > 0 && firstName.length > 0 && lastName.length > 0
-        //     && isValidEmail(email) && isValidPhoneNo(phone)
+        // return true 
+        return email.length > 0 && firstName.length > 0 && lastName.length > 0
+            && isValidEmail(email) && isValidPhoneNo(phone)
     }
 
     return (
@@ -204,18 +204,18 @@ const UserScreen = () => {
                 <View style={{ marginVertical: 6 }}>
                     <TouchableOpacity
                         disabled={isValidationSuccess() === false}
-                        // onPress={() => {
-                        //     nav.navigate('UserScreen', {
-                        //         oldPrice: oldPrice,
-                        //         newPrice: newPrice,
-                        //         name: name,
-                        //         children: children,
-                        //         adult: adult,
-                        //         rating: rating,
-                        //         startDate: startDate,
-                        //         endDate: endDate,
-                        //     })
-                        // }}
+                        onPress={() => {
+                            nav.navigate('ConfirmationScreen', {
+                                oldPrice: oldPrice,
+                                newPrice: newPrice,
+                                name: name,
+                                children: children,
+                                adult: adult,
+                                rating: rating,
+                                startDate: startDate,
+                                endDate: endDate,
+                            })
+                        }}
                         style={{
                             backgroundColor: isValidationSuccess() == true ? '#0071C2' : colors.inActive,
                             padding: 11,

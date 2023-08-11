@@ -11,6 +11,10 @@ export const isValidName = (name) => {
     return name.length >= 1
 }
 
+export const isValidPassword = (pw) => {
+    return pw.length >= 5
+}
+
 //validate re-password
 export const isValidRePassword = (rePassword, password) => {
     return rePassword === password

@@ -4,9 +4,10 @@ export { default as SearchResult } from './SearchResult'
 export { default as PropertyCard } from './PropertyCard'
 import { pixelNormalize } from './Normalize'
 export { pixelNormalize }
-import { isValidEmail, isValidPhoneNo, isValidName } from './Validation'
+import { isValidEmail, isValidPhoneNo, isValidName, isValidPassword } from './Validation'
 export {
     isValidEmail,
     isValidPhoneNo,
-    isValidName
+    isValidName,
+    isValidPassword
 }
