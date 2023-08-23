@@ -2,15 +2,51 @@ import {
   View, Text, SafeAreaView, TouchableOpacity,
   ScrollView, TextInput, Platform, Pressable
 } from 'react-native'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSelector } from 'react-redux'
 import { colors } from '../constants';
 import { Ionicons } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux';
+import { savedPlaces } from '../SavedReducer';
+import { collection, getDoc, doc } from "firebase/firestore";
+import { auth, db } from "../firebase";
+import { Feather } from '@expo/vector-icons';
 
 
 const BookingScreen = () => {
-  const bookings = useSelector((state) => state.booking.booking)
+  const bookings = useSelector((state) => state.booking.booking);
+  const [oldBooking, setOldBooking] = useState([]);
+  const [bookingList, setBookingList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Lấy dữ liệu từ Firebase và cập nhật vào oldBooking
+    const fetchOldBookings = async () => {
+      try {
+        setLoading(true); // Bắt đầu hiển thị "Đang tải"
+        const uid = auth.currentUser.uid;
+        const userDocRef = doc(db, 'user', uid);
+        const docSnap = await getDoc(userDocRef);
+        if (docSnap.exists()) {
+          const bookingDetailsFromFirebase = docSnap.data().bookingDetails || [];
+          setOldBooking(bookingDetailsFromFirebase);
+          setLoading(false); // Kết thúc hiển thị "Đang tải"
+        }
+      } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu từ Firebase:', error);
+        setLoading(false); // Kết thúc hiển thị "Đang tải" nếu có lỗi
+      }
+    };
+    fetchOldBookings();
+  }, []);
+
+  useEffect(() => {
+    // Khi cả dữ liệu từ Firebase và Redux đã được lấy, kết hợp chúng vào bookingList
+    const combinedBookings = [...oldBooking, ...bookings];
+    setBookingList(combinedBookings);
+    console.log(combinedBookings);
+  }, [oldBooking, bookings]);
 
   return (
     <SafeAreaView className='flex-1'>
@@ -27,8 +63,13 @@ const BookingScreen = () => {
         </Text>
       </View>
       <ScrollView className='flex-1 p-[15px]'>
-        {
-          bookings.length > 0 && bookings.map((item, index) =>
+        {loading ? (
+          <View className='mt-10 flex-row justify-center items-center'>
+            <Text className='mr-4'>Đang tải</Text>
+            <Feather name="loader" size={24} color={colors.active} />
+          </View>
+        ) :
+          bookingList.length > 0 && bookingList.map((item, index) =>
             <View key={index} className='bg-white p-[10px] rounded mb-6' >
               <Text numberOfLines={2} ellipsizeMode='tail' className='font-bold text-[20px]  w-[250px]'>{item.name}</Text>
               <View className='flex-row mt-2 items-center'>

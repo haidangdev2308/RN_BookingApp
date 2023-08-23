@@ -40,9 +40,9 @@ const UserScreen = () => {
     });
 
     const isValidationSuccess = () => {
-        // return true 
-        return email.length > 0 && firstName.length > 0 && lastName.length > 0
-            && isValidEmail(email) && isValidPhoneNo(phone)
+        return true
+        // return email.length > 0 && firstName.length > 0 && lastName.length > 0
+        //     && isValidEmail(email) && isValidPhoneNo(phone)
     }
 
     return (

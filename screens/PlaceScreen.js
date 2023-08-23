@@ -161,7 +161,7 @@ const PlaceScreen = () => {
                     height: 350
                 }}>
                     <View className="pt-[20px] px-[18px]">
-                        <Text className="text-[22px] font-bold ">Chọn phòng và khách</Text>
+                        <Text className="text-[22px] font-bold ">Sắp xếp theo</Text>
                     </View>
                     <View className=' my-6 mx-[18px] flex-1 flex-col'>
                         {

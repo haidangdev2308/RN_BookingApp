@@ -8,10 +8,13 @@ export const SavedSlice = createSlice(
         reducers: {
             savedPlaces: (state, action) => {
                 state.booking.push({ ...action.payload })
-            }
+            },
+            resetBooking: (state) => {
+                state.booking = [];
+            },
         }
     }
 )
 
-export const { savedPlaces } = SavedSlice.actions
+export const { savedPlaces, resetBooking } = SavedSlice.actions
 export default SavedSlice.reducer

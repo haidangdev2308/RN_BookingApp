@@ -1,5 +1,5 @@
 import {
-    View, Text, SafeAreaView, TouchableOpacity, TextInput, Pressable,
+    View, Text, SafeAreaView, TouchableOpacity, TextInput, Pressable, Alert
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { colors } from '../constants';
@@ -11,6 +11,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { isValidEmail, isValidPassword } from '../components';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
 
@@ -20,48 +21,68 @@ const LoginScreen = () => {
     const [errorEmail, setErrorEmail] = useState('')
     const [password, setPassword] = useState('')
     const [errorPassword, setErrorPassword] = useState('')
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const togglePasswordVisibility = () => {
+        setIsPasswordVisible(!isPasswordVisible);
+    };
 
     const login = () => {
-        signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
-            const user = userCredential.user
-        })
-    }
-    // console.log(userCredentials.user.stsTokenManager.accessToken);
-    // AsyncStorage.setItem(
-    //     "tokenUser",
-    //     userCredentials.user.stsTokenManager.accessToken,);
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                // Xử lý khi đăng nhập thành công
+                // AsyncStorage.setItem('refreshToken', user.refreshToken); // Lưu refresh token vào AsyncStorage
+                nav.replace('Main');
+            })
+            .catch((error) => {
 
-    // useEffect(() => {
-    //     const getMyObject = async () => {
-    //         try {
-    //             const jsonValue = await AsyncStorage.getItem("tokenUser");
-    //             console.log("jsonValue");
-    //             if (jsonValue) {
-    //                 nav.replace("Main");
-    //             }
-    //         } catch (e) {
-    //             console.log(e)
-    //         }
-    //     }
-    //     getMyObject();
-    // }, [token]);
+                if (error.code === 'auth/wrong-password') {
+                    Alert.alert('Thông báo', 'Sai mật khẩu, hãy thử lại lần nữa!', [
+                        {
+                            text: 'thoát',
+                            onPress: () => console.log('Cancel Pressed'),
+                            style: 'cancel',
+                        },
+                        { text: 'OK', onPress: () => console.log('OK Pressed') },
+                    ]);
+                    console.log('Wrong password. Please try again.');
+                } else if (error.code === 'auth/user-not-found') {
+                    Alert.alert('Thông báo', 'Không tìm thấy người dùng, kiểm tra lại email của bạn', [
+                        {
+                            text: 'thoát',
+                            onPress: () => console.log('Cancel Pressed'),
+                            style: 'cancel',
+                        },
+                        { text: 'OK', onPress: () => console.log('OK Pressed') },
+                    ]);
+                    console.log('User not found. Please check your email.');
+                } else if (error.code === 'auth/too-many-requests') {
+                    Alert.alert('Thông báo', 'Tài khoản của bạn đã bị tạm thời vô hiệu hóa do có quá nhiều lần đăng nhập thất bại. Vui lòng thử lại sau một thời gian hoặc đặt lại mật khẩu của bạn.', [
+                        {
+                            text: 'thoát',
+                            onPress: () => console.log('Cancel Pressed'),
+                            style: 'cancel',
+                        },
+                        { text: 'OK', onPress: () => console.log('OK Pressed') },
+                    ]);
+                } else {
+                    console.error('Đã xảy ra lỗi: ', error);
+                }
+            });
+    }
 
     useEffect(() => {
-        try {
-            const unsubscribe = auth.onAuthStateChanged((authUser) => {
-                if (authUser) {
-                    nav.navigate('Main')
-                }
-            })
+        const unsubscribe = auth.onAuthStateChanged((authUser) => {
+            if (authUser) {
+                nav.replace('Main');
+            }
+        });
 
-            return unsubscribe
-        } catch (error) {
-            console.log(error);
-        }
-    }, [])
+        return unsubscribe;
+    }, []);
 
     return (
-        <SafeAreaView className='flex-1'>
+        <SafeAreaView className='flex-1 bg-white'>
             <KeyboardAwareScrollView >
                 <View className='items-center mt-[210px]'>
                     <View className='mt-[-50px] items-center justify-center'>
@@ -99,19 +120,25 @@ const LoginScreen = () => {
                             fontSize: 16,
                             fontWeight: 600
                         }}>Mật khẩu</Text>
-                        <TextInput
-                            secureTextEntry={true}
-                            onChangeText={(text) => {
-                                setErrorPassword(isValidPassword(text) ? '' : 'Mật khẩu phải tối thiểu 5 ký tự')
-                                setPassword(text)
-                            }}
-                            placeholder='Nhập mật khẩu của bạn'
-                            style={{
-                                borderBottomWidth: 1,
-                                borderBottomColor: 'grey',
-                                marginTop: 5,
-                            }}
-                        />
+                        <View className='flex-row items-center'>
+                            <TextInput
+                                secureTextEntry={!isPasswordVisible}
+                                onChangeText={(text) => {
+                                    setErrorPassword(isValidPassword(text) ? '' : 'Mật khẩu phải tối thiểu 5 ký tự')
+                                    setPassword(text)
+                                }}
+                                placeholder='Nhập mật khẩu của bạn'
+                                style={{
+                                    borderBottomWidth: 1,
+                                    borderBottomColor: 'grey',
+                                    marginTop: 5,
+                                    flex: 1
+                                }}
+                            />
+                            <TouchableOpacity onPress={togglePasswordVisibility}>
+                                <Ionicons name={isPasswordVisible ? "ios-eye" : "ios-eye-off"} size={24} color="#003580" />
+                            </TouchableOpacity>
+                        </View>
                         {
                             errorPassword ?
                                 <View className="h-6 mb-1">

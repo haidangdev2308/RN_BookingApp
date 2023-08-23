@@ -26,6 +26,10 @@ const RegisterScreen = () => {
     const [errorPassword, setErrorPassword] = useState('')
     const [phone, setPhone] = useState('')
     const [errorPhone, setErrorPhone] = useState('')
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const togglePasswordVisibility = () => {
+        setIsPasswordVisible(!isPasswordVisible);
+    };
 
     const register = () => {
         if (!email || !password || !phone) {
@@ -48,19 +52,47 @@ const RegisterScreen = () => {
             })
         }).catch((error) => {
             if (error.code == "auth/email-already-in-use") {
-                console.log("The email address is already in use");
+                Alert.alert('Thông báo', 'Địa chỉ mail đã được sử dụng', [
+                    {
+                        text: 'thoát',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                    },
+                    { text: 'OK', onPress: () => console.log('OK Pressed') },
+                ]);
             } else if (error.code == "auth/invalid-email") {
-                console.log("The email address is not valid.");
+                Alert.alert('Thông báo', 'Địa chỉ email không chính xác', [
+                    {
+                        text: 'thoát',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                    },
+                    { text: 'OK', onPress: () => console.log('OK Pressed') },
+                ]);
             } else if (error.code == "auth/operation-not-allowed") {
-                console.log("Operation not allowed.");
+                Alert.alert('Thông báo', 'dữ liệu không được cho phép', [
+                    {
+                        text: 'thoát',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                    },
+                    { text: 'OK', onPress: () => console.log('OK Pressed') },
+                ]);
             } else if (error.code == "auth/weak-password") {
-                console.log("The password is too weak.");
+                Alert.alert('Thông báo', 'Mật khẩu quá yếu, hãy nhập lại', [
+                    {
+                        text: 'thoát',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                    },
+                    { text: 'OK', onPress: () => console.log('OK Pressed') },
+                ]);
             }
         });
     }
 
     return (
-        <SafeAreaView className='flex-1'>
+        <SafeAreaView className='flex-1 bg-white'>
             <KeyboardAwareScrollView >
                 <View className='items-center mt-[190px]'>
                     <View className='mt-[-50px] items-center justify-center'>
@@ -98,19 +130,25 @@ const RegisterScreen = () => {
                             fontSize: 16,
                             fontWeight: 600
                         }}>Mật khẩu</Text>
-                        <TextInput
-                            secureTextEntry={true}
-                            onChangeText={(text) => {
-                                setErrorPassword(isValidPassword(text) ? '' : 'Mật khẩu phải tối thiểu 5 ký tự.')
-                                setPassword(text)
-                            }}
-                            placeholder='Tạo mật khẩu của bạn'
-                            style={{
-                                borderBottomWidth: 1,
-                                borderBottomColor: 'grey',
-                                marginTop: 5,
-                            }}
-                        />
+                        <View className='flex-row items-center'>
+                            <TextInput
+                                secureTextEntry={!isPasswordVisible}
+                                onChangeText={(text) => {
+                                    setErrorPassword(isValidPassword(text) ? '' : 'Mật khẩu phải tối thiểu 5 ký tự.')
+                                    setPassword(text)
+                                }}
+                                placeholder='Tạo mật khẩu của bạn'
+                                style={{
+                                    borderBottomWidth: 1,
+                                    borderBottomColor: 'grey',
+                                    marginTop: 5,
+                                    flex: 1
+                                }}
+                            />
+                            <TouchableOpacity onPress={togglePasswordVisibility}>
+                                <Ionicons name={isPasswordVisible ? "ios-eye" : "ios-eye-off"} size={24} color="#003580" />
+                            </TouchableOpacity>
+                        </View>
                         {
                             errorPassword ?
                                 <View className="h-6 mb-1">
@@ -134,6 +172,7 @@ const RegisterScreen = () => {
                                 borderBottomWidth: 1,
                                 borderBottomColor: 'grey',
                                 marginTop: 5,
+
                             }}
                         />
                         {

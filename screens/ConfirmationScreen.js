@@ -10,6 +10,8 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
 import { savedPlaces } from '../SavedReducer';
+import { doc, updateDoc, getDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
 
 
 const ConfirmationScreen = () => {
@@ -28,9 +30,30 @@ const ConfirmationScreen = () => {
         selectedRoom } = route.params
 
     const dispatch = useDispatch()
-    const confirmBooking = () => {
-        dispatch(savedPlaces(route.params))
-        nav.navigate('Main')
+    const uid = auth.currentUser.uid
+    const confirmBooking = async () => {
+        const userDocRef = doc(db, 'user', uid); // Tham chiếu đến tài liệu người dùng
+        try {
+            const userDocSnap = await getDoc(userDocRef); // Lấy dữ liệu tài liệu người dùng
+            if (userDocSnap.exists()) {
+                const existingBookingDetails = userDocSnap.data().bookingDetails || [];
+                if (!Array.isArray(existingBookingDetails)) {
+                    console.error('existingBookingDetails is not an array:', existingBookingDetails);
+                    return;
+                }
+                const updatedBookingDetails = [...existingBookingDetails, route.params];
+
+                await updateDoc(userDocRef, {
+                    bookingDetails: updatedBookingDetails
+                });
+
+                dispatch(savedPlaces(route.params)); // Dispatch action để lưu thông tin đặt phòng
+                console.log('Đặt phòng thành công');
+                nav.navigate('Main');
+            }
+        } catch (error) {
+            console.error('Lỗi khi đặt phòng:', error);
+        }
     }
 
     return (

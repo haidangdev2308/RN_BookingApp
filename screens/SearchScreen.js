@@ -36,7 +36,7 @@ const SearchScreen = () => {
                     }}
                 >
                     <TouchableOpacity onPress={() => {
-                        nav.navigate("Home")
+                        nav.goBack()
                     }}>
                         <Ionicons name="arrow-back-outline" size={24} color="black" style={{ padding: 12 }} />
                     </TouchableOpacity>
