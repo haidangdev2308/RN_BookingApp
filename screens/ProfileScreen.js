@@ -7,7 +7,8 @@ import { auth, db } from '../firebase';
 import { Feather } from '@expo/vector-icons';
 import { colors } from '../constants';
 import { useDispatch } from 'react-redux';
-import { savedPlaces, resetBooking } from '../SavedReducer';
+import { savedPlaces, resetBooking } from '../BookReducer';
+import { resetSaving } from '../SavedReducer';
 
 const ProfileScreen = () => {
   const nav = useNavigation()
@@ -39,6 +40,7 @@ const ProfileScreen = () => {
       await auth.signOut();
       await AsyncStorage.removeItem('refreshToken'); // Xóa refresh token từ AsyncStorage
       dispatch(resetBooking())
+      dispatch(resetSaving())
       console.log('Đăng xuất thành công và xóa refresh token');
       nav.replace('Login');
     } catch (error) {

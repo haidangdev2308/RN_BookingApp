@@ -1,10 +1,14 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import SavedReducer from "./SavedReducer";
+import BookReducer from "./BookReducer";
+
+const rootReducer = combineReducers({
+    booking: BookReducer,
+    saving: SavedReducer,
+});
 
 export default store = configureStore({
-    reducer: {
-        booking: SavedReducer
-    },
+    reducer: rootReducer,
 });
 
 

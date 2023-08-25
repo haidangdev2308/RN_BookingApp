@@ -8,6 +8,8 @@ import { useNavigation } from '@react-navigation/native';
 import { getDoc, doc, updateDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { arrayRemove, arrayUnion } from 'firebase/firestore';
+import { useDispatch } from 'react-redux';
+import { startSaving,  deleteSaving } from '../SavedReducer';
 
 const PropertyCard = (props) => {
 
@@ -24,9 +26,11 @@ const PropertyCard = (props) => {
         room: room,
         adult: adult,
         children: children,
-        endDate: selectedDate.endDate,
-        startDate: selectedDate.startDate,
+        selectedDate: selectedDate,
+        address: property.address
     }
+
+    const dispatch = useDispatch()
 
     const VND = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
@@ -34,29 +38,19 @@ const PropertyCard = (props) => {
     });
 
     const nav = useNavigation()
+    const uid = auth.currentUser.uid;
+    const userDocRef = doc(db, 'user', uid);
 
-    const isEqual = (object1, object2) => {
-        const jsonString1 = JSON.stringify(object1);
-        const jsonString2 = JSON.stringify(object2);
-        return jsonString1 === jsonString2;
-    };
 
     // Khi component mở và tải dữ liệu từ Firebase
     useEffect(() => {
         const checkIfSaved = async () => {
-            const uid = auth.currentUser.uid;
-            const userDocRef = doc(db, 'user', uid);
-
-            try {
-                const userDocSnap = await getDoc(userDocRef);
-                if (userDocSnap.exists()) {
-                    const savedList = userDocSnap.data().SavedList || [];
-                    const isSavedInList = savedList.some(item => item.name === saveInfo.name);
-                    setIsSaved(isSavedInList);
-                    console.log('kiem tra trang thai luu');
-                }
-            } catch (error) {
-                console.error('Lỗi khi kiểm tra trạng thái lưu:', error);
+            const userDocSnap = await getDoc(userDocRef);
+            if (userDocSnap.exists()) {
+                const savedList = userDocSnap.data().SavedList || [];
+                const isSavedInList = savedList.some(item => item.name === saveInfo.name);
+                setIsSaved(isSavedInList);
+                console.log('kiem tra trang thai luu');
             }
         };
 
@@ -64,33 +58,22 @@ const PropertyCard = (props) => {
     }, []);
 
     const addToSavedList = async (saveInfo) => {
-        const uid = auth.currentUser.uid;
-
-        try {
-            const userDocRef = doc(db, 'user', uid);
-            await updateDoc(userDocRef, {
-                SavedList: arrayUnion(saveInfo),
-            });
-            console.log('Đã thêm chỗ nghỉ vào SavedList');
-        } catch (error) {
-            console.error('Lỗi khi thêm chỗ nghỉ vào SavedList:', error);
-        }
+        const userDocRef = doc(db, 'user', uid);
+        await updateDoc(userDocRef, {
+            SavedList: arrayUnion(saveInfo),
+        })
+        dispatch(startSaving(saveInfo));
+        console.log('Đã thêm chỗ nghỉ vào SavedList');
     };
 
     const removeFromSavedList = async (saveInfo) => {
-        const uid = auth.currentUser.uid;
+        const userDocRef = doc(db, 'user', uid);
+        await updateDoc(userDocRef, {
+            SavedList: arrayRemove(saveInfo)
+        });
+        dispatch(deleteSaving(saveInfo));
+        console.log('Đã xoá chỗ nghỉ khỏi SavedList');
 
-        try {
-            const userDocRef = doc(db, 'user', uid);
-
-            await updateDoc(userDocRef, {
-                SavedList: arrayRemove(saveInfo)
-            });
-
-            console.log('Đã xoá chỗ nghỉ khỏi SavedList');
-        } catch (error) {
-            console.error('Lỗi khi xoá chỗ nghỉ khỏi SavedList:', error);
-        }
     };
 
     const handleSaveToggle = (saveInfo, isSaved) => {

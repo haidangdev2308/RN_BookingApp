@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import { colors } from '../constants';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
-import { savedPlaces } from '../SavedReducer';
+import { savedPlaces } from '../BookReducer';
 import { collection, getDoc, doc } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { Feather } from '@expo/vector-icons';
