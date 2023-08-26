@@ -293,6 +293,8 @@ export const data = [
           "CFC-4/C, Road No-2 Hardware Park, Beside TCS, Tukkuguda, 501351 Hyderabad, India",
         oldPrice: 4332000,
         newPrice: 3200000,
+        latitude: "13.7359",
+        longitude: "77.5431",
         photos: [
           {
             id: "140",
@@ -381,6 +383,8 @@ export const data = [
           "Plot 73, Shilpi Valley, Gafoor Nagar, Madhapur, Opp Hitech City Mindspace, Hyderabad",
         oldPrice: 5200000,
         newPrice: 4100000,
+        latitude: "11.0359",
+        longitude: "77.6431",
         photos: [
           {
             id: "160",

@@ -9,7 +9,7 @@ import { getDoc, doc, updateDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { arrayRemove, arrayUnion } from 'firebase/firestore';
 import { useDispatch } from 'react-redux';
-import { startSaving,  deleteSaving } from '../SavedReducer';
+import { startSaving, deleteSaving } from '../SavedReducer';
 
 const PropertyCard = (props) => {
 
@@ -62,7 +62,7 @@ const PropertyCard = (props) => {
         await updateDoc(userDocRef, {
             SavedList: arrayUnion(saveInfo),
         })
-        dispatch(startSaving(saveInfo));
+        // dispatch(startSaving(saveInfo));
         console.log('Đã thêm chỗ nghỉ vào SavedList');
     };
 
@@ -71,7 +71,7 @@ const PropertyCard = (props) => {
         await updateDoc(userDocRef, {
             SavedList: arrayRemove(saveInfo)
         });
-        dispatch(deleteSaving(saveInfo));
+        // dispatch(deleteSaving(saveInfo));
         console.log('Đã xoá chỗ nghỉ khỏi SavedList');
 
     };
